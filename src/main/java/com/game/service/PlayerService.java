@@ -231,9 +231,6 @@ public class PlayerService {
             ) {
         Iterable<PlayerEntity> listWithAll = playerRepo.findAll();
         List<PlayerEntity> filteredList = new ArrayList<>();
-        for (PlayerEntity q : listWithAll) {
-            filteredList.add(q);
-        }
 
         if (name == null
         && title == null
@@ -247,112 +244,112 @@ public class PlayerService {
         && minLevel == null
         && maxLevel == null
         ) {
+            for (PlayerEntity e: listWithAll) {
+                filteredList.add(e);
+            }
             return filteredList;
         }
 
         for (PlayerEntity e: listWithAll) {
 
-//            boolean needToAdd = true;
-//
-//            if (!(needToAdd == true && name != null && e.getName().contains(name))) {
-//                needToAdd = false;
-//            }
-//
-//            if (needToAdd) {
-//                filteredList.add(e);
-//            }
+            boolean needToAdd = true;
 
-            if (filteredList.contains(e) && name != null) {
-                if (!e.getName().contains(name)) {
-                    filteredList.remove(e);
+            if (name != null) {
+                if (!(needToAdd == true && e.getName().contains(name))) {
+                    needToAdd = false;
                 }
             }
 
-            if (filteredList.contains(e) && title != null) {
-                if (!e.getTitle().contains(title)) {
-                    filteredList.remove(e);
+            if (title != null) {
+                if (!(needToAdd == true && e.getTitle().contains(title))) {
+                    needToAdd = false;
                 }
             }
 
-            if (filteredList.contains(e) && race != null) {
-                if (e.getRace() != race) {
-                    filteredList.remove(e);
+            if (race != null) {
+                if (!(needToAdd == true && e.getRace() == race)) {
+                    needToAdd = false;
                 }
             }
 
-            if (filteredList.contains(e) && profession != null) {
-                if (e.getProfession() != profession) {
-                    filteredList.remove(e);
+            if (profession != null) {
+                if (!(needToAdd == true && e.getProfession() == profession)) {
+                    needToAdd = false;
                 }
             }
 
-            if (filteredList.contains(e) && after != null) {
-                if (e.getBirthdayTime() < after) {
-                    filteredList.remove(e);
-                } else {
-                    if (before != null && e.getBirthdayTime() > before) {
-                        filteredList.remove(e);
+            if (after != null) {
+                if (!(needToAdd == true && e.getBirthdayTime() >= after)) {
+                    needToAdd = false;
+                } else if (before != null) {
+                    if (!(e.getBirthdayTime() <= before)) {
+                        needToAdd = false;
                     }
                 }
             }
 
-            if (filteredList.contains(e) && before != null) {
-                if (e.getBirthdayTime() > before) {
-                    filteredList.remove(e);
-                } else {
-                    if (after != null && e.getBirthdayTime() < after) {
-                        filteredList.remove(e);
+            if (before != null) {
+                if (!(needToAdd == true && e.getBirthdayTime() <= before)) {
+                    needToAdd = false;
+                } else if (after != null) {
+                    if (!(e.getBirthdayTime() >= after)) {
+                        needToAdd = false;
                     }
                 }
             }
 
-            if (filteredList.contains(e) && banned != null) {
-                if (e.getBanned() != banned) {
-                    filteredList.remove(e);
+            if (banned != null) {
+                if (!(needToAdd == true && e.getBanned() == banned)) {
+                    needToAdd = false;
                 }
             }
 
-            if (filteredList.contains(e) && minExperience != null) {
-                if (e.getExperience() < minExperience) {
-                    filteredList.remove(e);
-                } else {
-                    if (maxExperience != null && e.getExperience() > maxExperience) {
-                        filteredList.remove(e);
+            if (minExperience != null) {
+                if (!(needToAdd == true && e.getExperience() >= minExperience)) {
+                    needToAdd = false;
+                } else if (maxExperience != null) {
+                    if (!(e.getExperience() <= maxExperience)) {
+                        needToAdd = false;
                     }
                 }
             }
 
-            if (filteredList.contains(e) && maxExperience != null) {
-                if (e.getExperience() > maxExperience) {
-                    filteredList.remove(e);
-                } else {
-                    if (minExperience != null && e.getExperience() < minExperience) {
-                        filteredList.remove(e);
+            if (maxExperience != null) {
+                if (!(needToAdd == true && e.getExperience() <= maxExperience)) {
+                    needToAdd = false;
+                } else if (minExperience != null) {
+                    if (!(e.getExperience() >= minExperience)) {
+                        needToAdd = false;
                     }
                 }
             }
 
-            if (filteredList.contains(e) && minLevel != null) {
-                if (e.getLevel() < minLevel) {
-                    filteredList.remove(e);
-                } else {
-                    if (maxLevel != null && e.getLevel() > maxLevel) {
-                        filteredList.remove(e);
+            if (minLevel != null) {
+                if (!(needToAdd == true && e.getLevel() >= minLevel)) {
+                    needToAdd = false;
+                } else if (maxLevel != null) {
+                    if (!(e.getLevel() <= maxLevel)) {
+                        needToAdd = false;
                     }
                 }
             }
 
-            if (filteredList.contains(e) && maxLevel != null) {
-                if (e.getLevel() > maxLevel) {
-                    filteredList.remove(e);
-                } else {
-                    if (minLevel != null && e.getLevel() < minLevel) {
-                        filteredList.remove(e);
+            if (maxLevel != null) {
+                if (!(needToAdd == true && e.getLevel() <= maxLevel)) {
+                    needToAdd = false;
+                } else if (minLevel != null) {
+                    if (!(e.getLevel() >= minLevel)) {
+                        needToAdd = false;
                     }
                 }
+            }
+
+            if (needToAdd) {
+                filteredList.add(e);
             }
 
         }
+
         return filteredList;
     }
 }
